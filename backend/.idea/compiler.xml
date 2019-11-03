@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="UBHacking2019" />
+        <module name="backend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="UBHacking2019" target="1.5" />
+      <module name="backend" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

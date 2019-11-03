@@ -12,7 +12,11 @@ html {
 }
 
 body {
-    background-color: #C5C6C7;
+    background-image: url(../static/img/sky.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: 'Dosis', sans-serif;
 }
 
@@ -62,10 +66,7 @@ span#buttonEmph {
 }
 
 .jumbotron {
-    background-image: url(../img/board.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background: transparent;
     padding-top: 50px;
     margin-top: 56px;
     margin-bottom: 0;
@@ -73,7 +74,7 @@ span#buttonEmph {
 }
 
 h2.search {
-    color: #0B0C10;
+    color: #C5C6C7;
     font-size: 3em;
     font-weight: 700;
     margin-bottom: 10px;
@@ -107,7 +108,40 @@ button.col-md-3 {
 }
 
 i.fa-angle-down {
+    size: 3em;
     color: white;
+}
+
+table {
+    margin-top: 60px;
+    text-align: center;
+}
+
+th, td {
+    color: #C5C6C7;
+    width: 300px;
+    height: 40px;
+    font-size: 1.2em;
+}
+
+th {
+    font-size: 1.6em;
+    font-weight: 700;
+}
+
+td a:link {
+    text-decoration: none;
+    color: #C5C6C7;
+}
+
+td a:hover {
+    color: #66FCF1;
+    text-decoration: none;
+}
+
+td a:visited {
+    color: #C5C6C7;
+    text-decoration: none;
 }
 
 @media (max-width: 576px) {
