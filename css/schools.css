@@ -1,0 +1,120 @@
+/*
+COLORS:
+Black: #0B0C10
+Blue-black: #1F2833
+Gray: #C5C6C7
+Mint: #66FCF1
+Mint-blue: #45A29E
+*/
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #C5C6C7;
+    font-family: 'Dosis', sans-serif;
+}
+
+.bg-dark {
+    background-color: #0B0C10 !important;
+}
+
+.btn-outline-success {
+    color: #66FCF1;
+    border-color: #66FCF1;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #C5C6C7;
+    font-weight: 700;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: white;
+}
+
+.form-inline .form-control {
+    width: 350px;
+}
+
+.btn-group-lg > .btn, .btn-lg {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.btn-secondary {
+	color: #fff;
+	background-color: #45A29E;
+	border-color: #45A29E;
+}
+
+.btn-secondary:hover {
+	color: #fff;
+	background-color: #2e6b68;
+	border-color: #2e6b68;
+}
+
+span#buttonEmph {
+    font-weight: 700;
+    font-size: 1.5em;
+    color: #303f50;
+}
+
+.jumbotron {
+    background-image: url(../img/board.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding-top: 50px;
+    margin-top: 56px;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+h2.search {
+    color: #0B0C10;
+    font-size: 3em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+button.col {
+    flex-basis: auto;
+    max-width: 40%;
+}
+
+button.col-md-3 {
+    max-width: 15%;
+}
+
+.row button {
+    padding-left: 50px;
+    padding-right: 50px;
+    text-align: center;
+    min-width: 170px;
+    margin-bottom: 10px;
+}
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .navbar-nav {
+    float: none;
+    display:inline-block;
+    vertical-align: middle;
+}
+
+i.fa-angle-down {
+    color: white;
+}
+
+@media (max-width: 576px) {
+    .row button {
+        min-width: 170px;
+    }
+    .form-inline .form-control {
+        width: 250px;
+    }
+}
