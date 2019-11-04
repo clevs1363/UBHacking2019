@@ -3,8 +3,10 @@ import java.io.File
 import com.corundumstudio.socketio.listener.{ConnectListener, DataListener, DisconnectListener}
 import com.corundumstudio.socketio.{AckRequest, Configuration, SocketIOClient, SocketIOServer}
 
-import scala.io.{BufferedSource, Source}
+import scala.io._
 import com.github.tototoshi.csv._
+
+import scala.collection.mutable.ListBuffer
 
 class Server() {
 
@@ -39,22 +41,36 @@ class addTAListener() extends DataListener[String] {
     val dataArr = data.split('$')
     writer.writeRow(List(dataArr(0), "n/a", dataArr(1), 0, 0, 0))
     writer.close()
+
+    println(data)
+    
+
   }
 }
 
 class ratingListener() extends DataListener[String] {
   override def onData(socket: SocketIOClient, data: String, ackRequest: AckRequest): Unit = {
-    val reader = CSVReader.open(new File("../flask/static/data/TAlist.csv"))
-    val it = reader.iterator
-    val dataArr = data.split('&')
-    while(it.hasNext) {
-      var node = it.next.toArray
-      if (node.head == dataArr.head) {
-        node(5) += 1
-        node(4) += dataArr(1)
-        node(3) += (","+dataArr(2))
-        node(1) = (node(4).toDouble / node(5).toDouble).toString
+    val reader = CSVReader.open("../flask/static/data/TAlist.csv")
+    val totalArr: ListBuffer[List[String]] = new ListBuffer[List[String]]()
+    val dataArr = data.split("@")
+    dataArr.foreach(a => println(a))
+    val all = reader.all()
+    for (line <- all) {
+      if (line.head == dataArr.head) {
+        val amount = (line(5).toDouble + 1).toString
+        val total = (line(4).toDouble + dataArr(1).toDouble).toString
+        val reviews = line(3) + ","+dataArr(2)
+        val rating = (total.toDouble / amount.toDouble).toString
+        socket.sendEvent("rating", rating)
+        totalArr += List(dataArr.head, rating, line(2), reviews, total, amount)
+      } else if (line.head == "NAME") {
+        totalArr += List(line.head, line(1), line(2), line(3), line(4), line(5))
       }
+      println("totalArr: " + totalArr)
+    }
+    val writer = CSVWriter.open("../flask/static/data/TAlist.csv")
+    for (line <- totalArr) {
+      writer.writeRow(List(line.head, line(1), line(2), line(3), line(4), line(5)))
     }
   }
 }
@@ -77,15 +93,13 @@ class SchoolListener() extends DataListener[Nothing] {
 class TAListener() extends DataListener[String] {
   override def onData(socket: SocketIOClient, inputData: String, ackRequest: AckRequest): Unit = {
     val reader = CSVReader.open(new File("../flask/static/data/TAlist.csv")).allWithHeaders()
-    println(reader)
     var data = ""
     for (map <- reader) {
       if (map("NAME") == inputData) {
         data += (map("NAME") + "$")
         data += (map("RATING") + "$")
-        data += (map("COURSE") + "$")
+        data += (map("CLASS") + "$")
         data += map("REVIEWS")
-        println(data)
         socket.sendEvent("TA", data)
       }
     }

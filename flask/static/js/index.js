@@ -117,18 +117,30 @@ function popModal(element) {
 function addTA() {
     var data = "";
     var name = document.getElementById("name").value;
-    data = data + name + "$";
+    currentName = name;
+    data += ("name: " + name);
     var cl = document.getElementById("class").value;
-    data = data + cl + "$";
-    socket.emit("addTA", data); 
+    data += ("class: " + cl);
+    console.log(data);
+    
+    socket.emit("addTA", JSON.stringify(data)); 
+    var TA = document.createElement('p');
+    TA.class="uniqueTAIdentifier"
+    $("uniqueTAIdentifier").attr("data-toggle", "modal");
+    $("uniqueTAIdentifier").attr("data-target", "#taModal");
+    $("uniqueTAIdentifier").attr("onClick", "popModal(this);");
+    TA.innerHTML = "<span class=\"number mr-3\">n/a</span>" + " " + currentName;
+    var div = document.getElementById("tas");
+    div.appendChild(TA);
+    setColor();
 }
 
 function addRating() {
     var data = "";
-    data = data + currentName + "$";
-    var rating = document.getElementById("exampleFormControlSelect1");
-    data = data + rating + "$";
-    var review = document.getElementById("exampleFormControlTextarea1");
-    data = data + rating + "$";
+    data = data + currentName + "@";
+    var rating = document.getElementById("exampleFormControlSelect1").value;
+    data = data + rating + "@";
+    var review = document.getElementById("exampleFormControlTextarea1").value;
+    data = data + review;
     socket.emit("addRating", data);
 }

@@ -21,7 +21,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 </head>
 
-<body onload="setColor();">
+<body onload="">
     <!--[if lt IE 7]>
                 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
@@ -79,11 +79,11 @@
         <h1>{{ school_name }}</h1>
         <button class="makeTA btn btn-secondary text-center" data-toggle="modal" data-target="#makeTAModal">Add a TA</button>
         <div class="tas d-flex flex-column justify-content-center" id="tas">
-            <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">1.1</span>Mikohl</p>
+            <!--<p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">1.1</span>Mikohl</p>
             <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">4.9</span>Joe Brown</p>
             <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">2.3</span>Stephen Malinkowski</p>
             <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">3.0</span>Megan Wu</p>
-            <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">n/a</span>Jacob Snyderman</p>
+            <p data-toggle="modal" data-target="#taModal" onclick="popModal(this);"><span class="number mr-3">n/a</span>Jacob Snyderman</p>-->
         </div>
     </section>
 
@@ -132,13 +132,13 @@
     <div class="modal fade" id="makeTAModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form onsubmit="addTA();" class="makeTAForm">
+                <form class="makeTAForm">
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" class="form-control f my-1" id="name"><br>
                         <label for="class">Class:</label>
                         <input type="text" class="form-control f my-1" id="class">
-                        <button type="submit" class="btn btn-danger">Submit</button>
+                        <button class="btn btn-danger" onclick="addTA();">Submit</button>
                     </div>
                 </form>
             </div>
