@@ -38,6 +38,7 @@ object Database {
     val currentRating = row.getDouble("totalRating") + rating
     val currentAmount = row.getInt("amountOfRatings") + 1
     val newRating = currentRating/currentAmount
+    val reviews = row.getString("reviews").split("$")
 
     statement.setDouble(1, currentRating)
     statement.setInt(2, currentAmount)
