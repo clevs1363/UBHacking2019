@@ -77,10 +77,9 @@
         <!-- https://mvnrepository.com/artifact/com.github.tototoshi/scala-csv -->
         <dependency>
             <groupId>com.github.tototoshi</groupId>
-            <artifactId>scala-csv_2.13</artifactId>
+            <artifactId>scala-csv_2.12</artifactId>
             <version>1.3.6</version>
         </dependency>
-
 
     </dependencies>
 </project>

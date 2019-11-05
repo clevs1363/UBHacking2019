@@ -1,6 +1,7 @@
 const socket = io.connect("http://localhost:8080", { transports: ['websocket'] });
 var counter = 0;
 var currentName = "";
+var selectedTA;
 
 socket.on('school_item', function(event) {
     var list = event.split("$");
@@ -53,7 +54,8 @@ function setColor() {
     for (var child of children) {
         var element = child.firstChild;
         var num = element.innerHTML;
-        if (num < 1.3) {
+        console.log(num)
+        if (num > 0 && num < 1.3) {
             element.style.backgroundColor = "#cc0000";
         } else if (num >= 1.3 && num < 2.5) {
             element.style.backgroundColor = "#ff9900";
@@ -61,7 +63,7 @@ function setColor() {
             element.style.backgroundColor = "#ffff00";
         } else if (num >= 3.7 && num <= 5.0) {
             element.style.backgroundColor = "#00ff00";
-        } else if (num =='-') {
+        } else if (num == 0.0) {
             element.style.backgroundColor = "C5C6C7";
         }
     }
@@ -70,25 +72,27 @@ function setColor() {
 
 function popModal(element) {
     var text = element.innerText;
-    var name = text.substring(3)
+    var name = text.substring(3).trim();
     currentName = name;
+    selectedTA = element;
     socket.emit("getTA", name);
     socket.on('TA', function(event) {
-        var list = event.split("$");
-        document.getElementById("modalLabel").innerHTML = name + ": " + list[2];
+        var data = JSON.parse(event);
+        document.getElementById("modalLabel").innerHTML = name + ": " + data.class;
         var body = document.getElementById("modal-body");
         var TARating = document.getElementById("TARating")
         if (TARating == null) {
             var rating = document.createElement('h4');
-            var ratingContent = document.createTextNode("Rating: " + list[1]);
+            if (data.overallRating == 0) { data.overallRating = "n/a";}
+            var ratingContent = document.createTextNode("Rating: " + data.overallRating);
             rating.id = "TARating";
             rating.appendChild(ratingContent);
             body.appendChild(rating);
         } else {
-            TARating.innerHTML = ("Rating: " + list[1]);
+            if (data.overallRating == 0) { data.overallRating = "n/a"; }
+            TARating.innerHTML = ("Rating: " + (Math.round(10 * data.overallRating) / 10).toFixed(1));
         }
-
-        var reviews = list[3].split(",");
+        var reviews = data.reviews.split(",");
         var rCont = document.getElementById("reviewCont");
         if (rCont == null) {
             var reviewCont = document.createElement('div');
@@ -116,31 +120,39 @@ function popModal(element) {
 
 function addTA() {
     var data = "";
-    var name = document.getElementById("name").value;
-    currentName = name;
-    data += ("name: " + name);
-    var cl = document.getElementById("class").value;
-    data += ("class: " + cl);
-    console.log(data);
+    var nameData = document.getElementById("name").value;
+    currentName = nameData;
+    var classData = document.getElementById("class").value;
+    var data = {
+        name: nameData,
+        class: classData
+    };
     
     socket.emit("addTA", JSON.stringify(data)); 
     var TA = document.createElement('p');
-    TA.class="uniqueTAIdentifier"
-    $("uniqueTAIdentifier").attr("data-toggle", "modal");
-    $("uniqueTAIdentifier").attr("data-target", "#taModal");
-    $("uniqueTAIdentifier").attr("onClick", "popModal(this);");
+    TA.className = "uniqueTAIdentifier";
+    TA.setAttribute("data-toggle", "modal");
+    TA.setAttribute("data-target", "#taModal");
+    TA.setAttribute("onClick", "popModal(this);");
     TA.innerHTML = "<span class=\"number mr-3\">n/a</span>" + " " + currentName;
     var div = document.getElementById("tas");
     div.appendChild(TA);
     setColor();
+    document.getElementById("closeAddTA").click();
 }
 
 function addRating() {
-    var data = "";
-    data = data + currentName + "@";
-    var rating = document.getElementById("exampleFormControlSelect1").value;
-    data = data + rating + "@";
-    var review = document.getElementById("exampleFormControlTextarea1").value;
-    data = data + review;
-    socket.emit("addRating", data);
+    var ratingData = document.getElementById("exampleFormControlSelect1").value + ".0";
+    var reviewData = document.getElementById("exampleFormControlTextarea1").value;
+    var data = {
+        name: currentName,
+        rating: ratingData,
+        review: reviewData
+    };
+    socket.emit("addRating", JSON.stringify(data));
+    socket.on("getRating", function(rating) {
+        selectedTA.firstChild.innerHTML = (Math.round(10 * rating) / 10).toFixed(1);
+        setColor();
+        document.getElementById("closeAddRating").click();
+    });
 }

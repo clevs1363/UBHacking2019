@@ -101,11 +101,11 @@
                 <div class="modal-body" id="modal-body">
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeAddRating">Close</button>
                     <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#ratingForm" aria-expanded="false" aria-controls="collapseExample">Add rating</button>
                     <br>
                     <div class="collapse" id="ratingForm">
-                        <form onsubmit="addRating();">
+                        <form>
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Rating</label>
                                 <select class="form-control" id="exampleFormControlSelect1">
@@ -120,7 +120,7 @@
                                 <label for="exampleFormControlTextarea1">Review</label>
                                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-primary" onclick="addRating();">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -131,6 +131,11 @@
 
     <div class="modal fade" id="makeTAModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle2" aria-hidden="true">
         <div class="modal-dialog" role="document">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeAddTA">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-content">
                 <form class="makeTAForm">
                     <div class="form-group">
@@ -138,7 +143,7 @@
                         <input type="text" class="form-control f my-1" id="name"><br>
                         <label for="class">Class:</label>
                         <input type="text" class="form-control f my-1" id="class">
-                        <button class="btn btn-danger" onclick="addTA();">Submit</button>
+                        <button type="button" class="btn btn-danger" onclick="addTA();">Submit</button>
                     </div>
                 </form>
             </div>
