@@ -39,10 +39,6 @@ $(document).ready(function () {
         counter++;
     });
 
-    function sendMessage() {
-        socket.emit("chat_message", "hello");
-    }
-
     function getSchools() {
         var elementExists = document.getElementById("dynamicNewRow");
         if (elementExists == null) {
@@ -70,6 +66,7 @@ $(document).ready(function () {
         
     }
 
+    // Triggered when TA modal is clicked
     $(document).on("click", ".uniqueTAIdentifier", function(e) {
         var element = this;
         var text = element.innerText;
@@ -79,7 +76,9 @@ $(document).ready(function () {
         socket.emit("getTA", name);
         socket.on('TA', function(event) {
             var data = JSON.parse(event);
-            document.getElementById("modalLabel").innerHTML = name + ": " + data.class;
+            console.log(data); 
+            document.getElementById("modalLabel").innerHTML = "";
+            document.getElementById("modalLabel").innerHTML = currentName + ": " + data.class;
             var body = document.getElementById("modal-body");
             var TARating = document.getElementById("TARating")
             if (TARating == null) {
@@ -90,42 +89,29 @@ $(document).ready(function () {
                 rating.appendChild(ratingContent);
                 body.appendChild(rating);
             } else {
-                if (data.overallRating == 0) { data.overallRating = "n/a"; }
-                TARating.innerHTML = ("Rating: " + (Math.round(10 * data.overallRating) / 10).toFixed(1));
+                if (data.overallRating == 0 || data.overallRating == "n/a") { data.overallRating = "n/a"; }
+                 else {TARating.innerHTML = ("Rating: " + (Math.round(10 * data.overallRating) / 10).toFixed(1));}
             }
-            var reviews = data.reviews.split("$");
             var rCont = document.getElementById("reviewCont");
             if (rCont == null) {
-                var reviewCont = document.createElement('div');
-                reviewCont.id = "reviewCont";
-                var count = 1;
-                for (var r of reviews) {
-                    if (count = reviews.length - 1) {
-                        var review = document.createElement('p');
-                        review.className = "review";
-                        rContent = document.createTextNode(r);
-                        review.appendChild(rContent);
-                        reviewCont.appendChild(review);
-                    } else {
-                        count++;
-                    }
-                }
-                body.appendChild(reviewCont);
+                var reviewContainer = document.createElement("div");
+                reviewContainer.id = "reviewCont";
+                body.appendChild(reviewContainer);
             } else {
-                var count = 1;
-                for (var r of reviews) {
-                    if (count = reviews.length - 1) {
+                while (rCont.firstChild) {
+                    rCont.removeChild(rCont.firstChild)
+                }
+                for (var r of data.reviews) {
+                    if (r != "") {
                         var review = document.createElement('p');
                         review.className = "review";
-                        rContent = document.createTextNode(r);
+                        rContent = document.createTextNode(r.charAt(0) + ": " + r.slice(1));
                         review.appendChild(rContent);
                         rCont.appendChild(review);
-                    } else {
-                        count++;
-                    }
+                    } 
                 }
             }
-            this.stopPropagation();
+            e.stopPropagation();
         });
     });
 
@@ -134,6 +120,8 @@ $(document).ready(function () {
         var nameData = document.getElementById("name").value;
         currentName = nameData;
         var classData = document.getElementById("class").value;
+        document.getElementById("name").value = '';
+        document.getElementById("class").value = '';
         var data = {
             name: nameData,
             class: classData
@@ -152,12 +140,14 @@ $(document).ready(function () {
     });
 
     $('#addRatingButton').click(function() {
-        var ratingData = document.getElementById("exampleFormControlSelect1").value + ".0";
-        var reviewData = document.getElementById("exampleFormControlTextarea1").value;
+        var ratingData = document.getElementById("formRatingField").value;
+        var reviewData = document.getElementById("formReviewField").value;
+        document.getElementById("formRatingField").value = '';
+        document.getElementById("formReviewField").value = '';
         var data = {
             name: currentName,
             rating: ratingData,
-            review: reviewData+"$"
+            review: reviewData
         };
         socket.emit("addRating", JSON.stringify(data));
         socket.on("getRating", function(rating) {

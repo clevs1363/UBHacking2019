@@ -36,7 +36,7 @@ class addTAListener() extends DataListener[String] {
     val parsed: JsValue = Json.parse(data)
     val name: String = (parsed \ "name").as[String]
     val clas: String = (parsed \ "class").as[String]
-    Database.addTA(name, 0.0, 0,  0.0, clas, "")
+    Database.addTA(name, 0.0, 0,  0.0, clas)
   }
 }
 
@@ -45,7 +45,7 @@ class ratingListener() extends DataListener[String] {
     val parsed: JsValue = Json.parse(data)
     println(parsed)
     val name: String = (parsed \ "name").as[String]
-    val rating = (parsed \ "rating").as[String].toDouble
+    val rating = (parsed \ "rating").as[String].toInt
     val review: String = (parsed \ "review").as[String]
     val newRating = Database.updateTA(name, rating, review)
 
